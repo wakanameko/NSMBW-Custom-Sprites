@@ -14,7 +14,7 @@
       <entry value="8">8 / Very slow</entry>
       <entry value="9">9 / Very very slow</entry>
     </list>
-    <list nybble="7" title="Jump height" comment="You can change jump height.">
+    <list nybble="7" title="Jump height" comment="You can change the jump height.">
       <entry value="0">0 / Won't jump (Don't use this)</entry>
       <entry value="1">1 / 3 blocks</entry>
       <entry value="2">2 / 6 blocks (recommend)</entry>
@@ -41,5 +41,17 @@
       <entry value="10">0257 / SE_PLY_LAND_CARPET</entry>
       <entry value="11">0258 / SE_PLY_LAND_PNGN</entry>
       <entry value="12">0259 / SE_PLY_LAND_YOSHI</entry>
+    </list>
+    <list nybble="10" title="Jumping Distance" comment="You can change the jump distance.">
+      <entry value="0">0 / Won't move sideways</entry>
+      <entry value="1">1 / 4 blocks (reccomend)</entry>
+      <entry value="2">2 / 8 blocks</entry>
+      <entry value="3">3 / 12</entry>
+      <entry value="4">4 / 16</entry>
+      <entry value="5">5 </entry>
+      <entry value="6">6 </entry>
+      <entry value="7">7 </entry>
+      <entry value="8">8 </entry>
+      <entry value="9">9 </entry>
     </list>
   </sprite> <!-- #487: Thwimp (koton) -->
