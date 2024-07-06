@@ -1,4 +1,4 @@
-# Thwimp v1.0.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/Thwimp/Reggie/sprites/Koton_0.png" width="32" align="center" />
+# Thwimp v1.1.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/Thwimp/Reggie/sprites/Koton_0.png" width="32" align="center" />
 *by ReaZ0n23*
 
 
@@ -26,6 +26,13 @@
 	> ⚠️ and don't forget to reference the 2 new classes in the list at the end ⚠️
 - Add the images in the `sprites` folder into your `sprites` folder
 - Restart reggie to apply the changes
+
+
+## Change Log
+ - v1.0.0
+   First release
+ - v1.1.0
+   Added the Jumping Distance option. So you can change the jump distance with Reggie!.
 
 
 *If I forgot some stuff or if you find a bug, be free to let me know*
