@@ -55,6 +55,7 @@ public:
 	int timewait;
 	int jumphight;
 	int landSFX;
+	int jumpingDistance;
 	int firstDirectionReggie;
 	int firstDirection;
 
@@ -205,12 +206,14 @@ int dakoton_c::onCreate() {
 	//this->[empty] = nybble8 & 0b10;
 	this->firstDirectionReggie = nybble8 & 0b1;		// 0000 000"+1" 0000 0000
 	this->landSFX = (247 + (this->settings >> 12 & 0xF));		// 0000 0000 "0"000 0000	// nybble 9
+	this->jumpingDistance = this->settings >> 8 & 0xF;	// 0000 0000 0"0"00 0000	// nybble 10
 	// 値の確認用	// Check values
 	OSReport("color : %02d\n", this->color);
 	OSReport("timewait : %02d\n", this->timewait);
 	OSReport("jumphight : %02d\n", this->jumphight);
 	OSReport("firstDirectionReggie : %02d\n", this->firstDirectionReggie);
 	OSReport("landSFX : %02d\n", this->landSFX);
+	OSReport("jumpingDistance : %02d\n", this->jumpingDistance);
 
 	// 初期化ってやつ？
 	this->timer = 0;
@@ -282,7 +285,7 @@ void dakoton_c::beginState_jumpkoton(){
 void dakoton_c::executeState_jumpkoton(){
 	//if (this->timer < 30){	// jumping
 		this->pos.y += (2.0f * this->jumphight - ((this->timer * this->timer - this->timer) / (495 / this->jumphight)));	// about 3*n blocks
-		this->pos.x += 1.1f * this->firstDirection;	// about 3*n blocks
+		this->pos.x += 1.1f * this->firstDirection * this->jumpingDistance;	// about 4*n blocks
 	/*}
 	else if (this->timer >= 30){	// falling
 		this->pos.y += (-1.9f * this->jumphight - ((this->timer * this->timer - this->timer) / (450 / this->jumphight)));
