@@ -13,6 +13,11 @@
 - Add `smw_DragonCoins.yaml` in your `Kamek` folder
 - Reference the `smw_DragonCoins.yaml` in your `NewerProject.yaml`
 - Add the code for the "more sprite stuff" using `smwDCoin` for the ProfileID and SpriteID
+- Add these addresses to your kamek_bass.x(kamek_pal.x):
+```
+	collectedDCoinID = 0x8000019C;
+	collectionDCoin = 0x80000198;
+```
 - Compile your code
 
 
