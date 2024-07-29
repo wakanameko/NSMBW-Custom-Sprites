@@ -1,11 +1,12 @@
 # DragonCoins β1.0.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_0.png" width="32" align="center" />
-*by ReaZ0n23*
+*by ReaZ0n23, assisted by wakanameko*
 
 
 ## Requirements
 - Knowledge about how to install this kind of stuff (at least the basics)
 - Kamek 1.2.X (changes may have to be made for Newer 1.3X)
 - [More sprites](https://github.com/Synell/NSMBW-Custom-Sprites/releases/tag/MoreSprites) by AboodXD & Nin0
+- [wakanaLib](https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/Libs/wakanalib.h) by wakanameko
 
 
 ## Kamek
