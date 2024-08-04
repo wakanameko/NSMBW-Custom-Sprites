@@ -4,6 +4,7 @@
 #include <sfx.h>
 #include <profile.h>
 #include "boss.h"
+#include <wakanalib.h>
 
 // Thwimp (koton) sprite by ReaZ0n23
 
@@ -39,6 +40,7 @@ public:
 	bool collisionCat14_YoshiFire(ActivePhysics *apThis, ActivePhysics *apOther); 
 
 	//void _vf148();	// visualDropKill
+	void addScoreWhenHit(void *other);
 	
 	mHeapAllocator_c allocator;
 	m3d::mdl_c bodyModel;
@@ -48,7 +50,7 @@ public:
 	int timer;
 	float baseground;
 	float dying;
-	int direction = dSprite_c__getXDirectionOfFurthestPlayerRelativeToVEC3(this, this->pos);
+	int direction; 
 	int randRotAnim;
 	// Reggie!s
 	int color;
@@ -58,10 +60,12 @@ public:
 	int jumpingDistance;
 	int firstDirectionReggie;
 	int firstDirection;
+	int beginDelay;
 
 	USING_STATES(dakoton_c);
 	DECLARE_STATE(jumpkoton);
 	DECLARE_STATE(waitkoton);
+	DECLARE_STATE(fwaitkoton);
 	DECLARE_STATE(diekoton);
 
 	static dActor_c* build();
@@ -84,6 +88,7 @@ Profile kotonProfile(&dakoton_c::build, SpriteId::koton, &kotonSpriteData, Profi
 extern "C" char usedForDeterminingStatePress_or_playerCollision(dEn_c* t, ActivePhysics *apThis, ActivePhysics *apOther, int unk1);
 CREATE_STATE(dakoton_c, jumpkoton);
 CREATE_STATE(dakoton_c, waitkoton);
+CREATE_STATE(dakoton_c, fwaitkoton);
 CREATE_STATE(dakoton_c, diekoton);
 
 
@@ -99,8 +104,25 @@ void dakoton_c::updateModelMatrices() {
 
 /////////////////////////////
 // Collision
-void dakoton_c::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
-	this->_vf220(apOther->owner);
+void dakoton_c::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {	
+	char hitType;
+	hitType = usedForDeterminingStatePress_or_playerCollision(this, apThis, apOther, 2);	// I think 4th argument is bool
+	
+	if(hitType < 3){		// not spin jump
+		DamagePlayer(this, apThis, apOther);
+	}
+	else{
+		//_vf258(*apOther);
+		//YoshiFumiJumpSet(this, apOther);
+		//pakkunYoshiFumiJumpSet(this, apOther);	// I could not guess the param_2.
+		/*
+		bouncePlayer(this, 4.0f);
+		PlaySound(this, SE_EMY_YOSHI_STEP);*/
+			
+		S16Vec nullRot = {0,0,0};
+		Vec oneVec = {1.0f, 1.0f, 1.0f};
+		SpawnEffect("Wm_ob_switch", 0, &apOther->owner->pos, &nullRot, &oneVec);
+	}
 }
 void dakoton_c::yoshiCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 	return playerCollision(apThis, apOther);
@@ -166,11 +188,14 @@ bool dakoton_c::collisionCat14_YoshiFire(ActivePhysics *apThis, ActivePhysics *a
 	return collisionCat1_Fireball_E_Explosion(apThis, apOther);
 }
 
+void dakoton_c::addScoreWhenHit(void *other) { }
+
 
 int dakoton_c::onCreate() {
 	this->scale.x = 1.0; 
 	this->scale.y = 1.0; 
 	this->scale.z = 1.0;
+	this->direction = dSprite_c__getXDirectionOfFurthestPlayerRelativeToVEC3(this, this->pos);
 
 	/////////////////////////////
 	// Hit me baby
@@ -182,7 +207,7 @@ int dakoton_c::onCreate() {
 	HitMeBaby.category1 = 0x3;
 	HitMeBaby.category2 = 0x0;
 	HitMeBaby.bitfield1 = 0x4F;
-	HitMeBaby.bitfield2 = 0b1111111110110000111111001111110;	// 右のバイトから、0unk,1ファイア,2アイス,3スター,4unk,5滑り(坂),6unk,7ヒップドロップ,8フェンス,9甲羅,10滑り(ペンギン),11スピン,12unk,13SpinFall(謎),14Fire(No FireBall, but like an explosion),15ヨッシー可食,16ヨッシーが勝手に食うかどうか,17大砲,18持ち上げ,19YoshiBullet,20ファイア(ヨッシー),21アイス(ヨッシー),残りは0
+	HitMeBaby.bitfield2 = 0b1111111110110000101011001011110;	// 右のバイトから、0unk,1ファイア,2アイス,3スター,4unk,5滑り(坂),6unk,7ヒップドロップ,8フェンス,9甲羅,10滑り(ペンギン),11スピン,12unk,13SpinFall(謎),14Fire(No FireBall, but like an explosion),15ヨッシー可食,16ヨッシーが勝手に食うかどうか,17大砲,18持ち上げ,19YoshiBullet,20ファイア(ヨッシー),21アイス(ヨッシー),残りは0
 
 	//HitMeBaby.unkShort1C = 0x0100;
 	HitMeBaby.unkShort1C = 0;
@@ -207,6 +232,7 @@ int dakoton_c::onCreate() {
 	this->firstDirectionReggie = nybble8 & 0b1;		// 0000 000"+1" 0000 0000
 	this->landSFX = (247 + (this->settings >> 12 & 0xF));		// 0000 0000 "0"000 0000	// nybble 9
 	this->jumpingDistance = this->settings >> 8 & 0xF;	// 0000 0000 0"0"00 0000	// nybble 10
+	this->beginDelay = this->settings >> 4 & 0xF;		// 0000 0000 00"0"0 0000	// nybble 11
 	// 値の確認用	// Check values
 	OSReport("color : %02d\n", this->color);
 	OSReport("timewait : %02d\n", this->timewait);
@@ -214,6 +240,7 @@ int dakoton_c::onCreate() {
 	OSReport("firstDirectionReggie : %02d\n", this->firstDirectionReggie);
 	OSReport("landSFX : %02d\n", this->landSFX);
 	OSReport("jumpingDistance : %02d\n", this->jumpingDistance);
+	OSReport("beginDelay : %02d\n", this->beginDelay);
 
 	// 初期化ってやつ？
 	this->timer = 0;
@@ -239,7 +266,7 @@ int dakoton_c::onCreate() {
 	allocator.unlink();
 
 	// state change
-	doStateChange(&StateID_waitkoton);
+	doStateChange(&StateID_fwaitkoton);
 	this->onExecute();
 	return true;
 }
@@ -260,9 +287,8 @@ int dakoton_c::onDraw() {
 
 /////////////////////////////
 // States
+// wait
 void dakoton_c::beginState_waitkoton() {
-	// OSReport("begin wait\n");
-	
 	this->timer = 0;
 }
 void dakoton_c::executeState_waitkoton() {
@@ -270,9 +296,20 @@ void dakoton_c::executeState_waitkoton() {
 		doStateChange(&StateID_jumpkoton);
 	}
 	this->timer += 1;
-	//OSReport("now timer : %d\n", this->timer);
 }
 void dakoton_c::endState_waitkoton() {}
+
+// Begin wait
+void dakoton_c::beginState_fwaitkoton() {
+	this->timer = 0;
+}
+void dakoton_c::executeState_fwaitkoton() {
+	if (this->timer >= 10 * this->timewait + this->beginDelay){
+		doStateChange(&StateID_jumpkoton);
+	}
+	this->timer += 1;
+}
+void dakoton_c::endState_fwaitkoton() {}
 
 // Jump
 void dakoton_c::beginState_jumpkoton(){
@@ -322,8 +359,7 @@ void dakoton_c::executeState_jumpkoton(){
 	}
 	this->timer += 1;
 }
-void dakoton_c::endState_jumpkoton(){
-}
+void dakoton_c::endState_jumpkoton(){}
 
 // die
 void dakoton_c::beginState_diekoton(){
