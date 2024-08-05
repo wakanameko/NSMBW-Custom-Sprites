@@ -4,7 +4,7 @@
 
 ## Requirements
 - Knowledge about how to install this kind of stuff (at least the basics)
-- Kamek 1.2.X (changes may have to be made for Newer 1.3X)
+- Kamek 1.2.X or 1.3X
 - [More sprites](https://github.com/Synell/NSMBW-Custom-Sprites/releases/tag/MoreSprites) by AboodXD & Nin0
 
 
