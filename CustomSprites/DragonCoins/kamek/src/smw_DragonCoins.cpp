@@ -1,9 +1,3 @@
-#include <common.h>
-#include <game.h>
-#include <g3dhax.h>
-#include <sfx.h>
-#include <profile.h>
-#include <wakanalib.h>
 #include "smw_DragonCoins.h"
 
 const char* smwDCarcNameList [] = {
@@ -44,6 +38,7 @@ class daSMW_DragonCions_c : public dEn_c {
 	int color;		// 6
 	u8 numWorld;	// 7
 	u8 numLevel;	// 8
+	u8 currentLevel;
 	u8 dCoinID;		// 11
 
 	void updateModelMatrices();
@@ -92,6 +87,10 @@ void daSMW_DragonCions_c::playerCollision(ActivePhysics *apThis, ActivePhysics *
 	collectionDCoin += 1;
 	OSReport("collected [%d] coins\n", collectionDCoin);	// 獲得したコインの総量
 
+	OSReport("currentLevel [%d]\n", this->currentLevel);	// The level + world number that placed this sprite
+	currentLevelCashe = this->currentLevel;
+	OSReport("currentLevelCashe [%d]\n", currentLevelCashe);	// The level + world number that placed this sprite[cache]
+
 
 	if(collectionDCoin < 5){			// I want to do 1000*2(n-1) ;;
 		PlaySoundWithFunctionB4(SoundRelatedClass, &GetCoinshandle, SE_OBJ_GET_DRAGON_COIN, 1);
@@ -117,7 +116,7 @@ void daSMW_DragonCions_c::playerCollision(ActivePhysics *apThis, ActivePhysics *
 	}
 
 	S16Vec nullRot = {0,0,0};
-	Vec oneVec = {1.0f, 1.0f, 1.0f};
+	Vec oneVec = {0.7f, 0.7f, 1.0f};
 	SpawnEffect("Wm_ob_starcoinget_gl", 0, &this->pos, &nullRot, &oneVec);
 
 	this->Delete(1);
@@ -163,10 +162,11 @@ bool daSMW_DragonCions_c::collisionCat3_StarPower(ActivePhysics *apThis, ActiveP
 int daSMW_DragonCions_c::onCreate() {
 	// Reggie settings
 	this->color = this->settings >> 24 & 0xF;				// 0000 0"0"00 0000 0000	// nybble 6
-	this->numWorld = (this->settings >> 20 & 0xF) + 1;		// 0000 00"0"0 0000 0000	// nybble 7
-	this->numLevel = (this->settings >> 16 & 0xF) + 1;		// 0000 000"0" 0000 0000	// nybble 8
+	this->numWorld = (this->settings >> 20 & 0xF);			// 0000 00"0"0 0000 0000	// nybble 7
+	this->numLevel = (this->settings >> 16 & 0xF);			// 0000 000"0" 0000 0000	// nybble 8
 	this->dCoinID = (this->settings >> 4 & 0xF) + 1;		// 0000 0000 00"0"0 0000	// nybble 11
 
+	// Related models
 	allocator.link(-1, GameHeaps[0], 0, 0x20);
 
 	char resName[16];
@@ -179,6 +179,10 @@ int daSMW_DragonCions_c::onCreate() {
 	SetupTextures_Enemy(&bodyModel, 0);
 
 	allocator.unlink();
+
+	// Load DCoinsInfo
+	//FileHandle fh;
+	//void *info = LoadFile(&fh, "/NewerRes/DCoinsInfo.bin");
 	
 	ActivePhysics::Info HitMeBaby;
 	HitMeBaby.xDistToCenter = 0.0;
@@ -195,8 +199,8 @@ int daSMW_DragonCions_c::onCreate() {
 	this->aPhysics.initWithStruct(this, &HitMeBaby);
 	this->aPhysics.addToList();
 
-	this->scale.x = 1.0;
-	this->scale.y = 1.0;
+	this->scale.x = 0.8;
+	this->scale.y = 0.8;
 	this->scale.z = 1.0;
 
 	this->pos.x += 0.0;
@@ -208,11 +212,27 @@ int daSMW_DragonCions_c::onCreate() {
 
 	this->onExecute();
 
-	for (int i = 0; i < 16; i++) {
-		if(this->dCoinID == collectedDCoinID[i]){	// dCoinID + 1
-			this->Delete(1);
+
+	this->currentLevel = this->numLevel + this->numWorld;
+
+	if(this->currentLevel != currentLevelCashe){
+		collectionDCoin = 0;	// 集めた総数の初期化
+		for (int i = 0; i < 16; ++i) {	// 配列を全て0に置換。要するに初期化
+    		collectedDCoinID[i] = 0;
 		}
 	}
+
+	OSReport("onCreate currentLevel [%d]\n", this->currentLevel);
+	OSReport("onCreate currentLevelCache [%d]\n", currentLevelCashe);
+
+	for (int i = 0; i < 16; i++) {	// コインIDが取得済みのIDリスト内にあるか
+		if(this->dCoinID == collectedDCoinID[i]){
+			if(this->currentLevel == currentLevelCashe){	// 
+				this->Delete(1);	// さーて削除削除削除削除削除削除削除削除削除削除
+			}
+		}
+	}
+
 	return true;
 }
 
