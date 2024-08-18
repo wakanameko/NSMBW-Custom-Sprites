@@ -1,4 +1,4 @@
-# DragonCoins β1.0.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_0.png" width="32" align="center" />
+# DragonCoins v1.0.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_0.png" width="32" align="center" />
 *by ReaZ0n23, assisted by wakanameko*
 
 
@@ -17,7 +17,8 @@
 - Add these addresses to your kamek_bass.x(kamek_pal.x):
 ```
 	collectedDCoinID = 0x8000019C;
-	collectionDCoin = 0x80000198;
+	collectionDCoin = 0x80000198;	/*0x80000198 to 0x8000015c maybe*/
+	currentLevelCashe = 0x80000158;
 ```
 - Compile your code
 
@@ -35,8 +36,11 @@
 
 
 ## Change Log
- - β1.0
+ - β1.0.0
   Known issues: Once collected, it will not respawn even if you enter other levels.
+ - 1.0.0
+  Fixed the hitbox, β1.0.0 issue
+  Adjusted the scale
 
 
 *If I forgot some stuff or if you find a bug, be free to let me know*
