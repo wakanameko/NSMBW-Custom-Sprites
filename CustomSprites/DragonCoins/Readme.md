@@ -36,9 +36,9 @@
 
 
 ## Change Log
- - β1.0.0
+ - β1.0.0　　
   Known issues: Once collected, it will not respawn even if you enter other levels.
- - 1.0.0
+ - 1.0.0　　
   Fixed the hitbox, β1.0.0 issue
   Adjusted the scale
 
