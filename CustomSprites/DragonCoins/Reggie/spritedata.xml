@@ -1,6 +1,8 @@
   <sprite id="489" name="smwDragonCoins" sizehacks="true" notes="Dragon Coins sprite from SMW.">
-    <list nybble="6" title="Color">
-      <entry value="0">Normal</entry>
+    <list nybble="6" title="Style">
+      <entry value="0">2D texture (SMW original)</entry>
+      <entry value="1">Bukachell's model</entry>
+      <entry value="2">Microtransagolor's model</entry>
     </list>
     <list nybble="7" title="World number" comment="Select the number of the world where the level you are now editing is located.">
       <entry value="0">0</entry>
@@ -38,6 +40,7 @@
       <entry value="14">14</entry>
       <entry value="15">15</entry>
     </list>
+    <checkbox nybble="9.4" title="Rotation" comment="If checked : This sprite is start to rotate."/>
     <list nybble="11" title="Doragin Coins ID" comment="Use numbers in order starting from 0. Please choose numbers without duplication.">
       <entry value="0">0</entry>
       <entry value="1">1</entry>
