@@ -1,4 +1,4 @@
-# DragonCoins v1.0.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_0.png" width="32" align="center" />
+# DragonCoins v1.1.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_0.png" width="32" align="center" />
 *by ReaZ0n23, assisted by wakanameko*
 
 
@@ -8,6 +8,9 @@
 - [More sprites](https://github.com/Synell/NSMBW-Custom-Sprites/releases/tag/MoreSprites) by AboodXD & Nin0
 - [wakanaLib](https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/Libs/wakanalib.h) by wakanameko
 
+## Credits
+<img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_1.png" width="32" align="center" /> by Bukachell
+<img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/DragonCoins/Reggie/sprites/smwDragoncoin_2.png" width="32" align="center" /> by Microtransagolor
 
 ## Kamek
 - Add `src/smw_DragonCoins.cpp` and `src/smw_DragonCoins.h` in your `src` folder
