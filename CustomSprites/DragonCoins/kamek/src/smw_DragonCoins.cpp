@@ -34,11 +34,13 @@ class daSMW_DragonCions_c : public dEn_c {
 
 	Vec playerPos;
 
+	u8 currentLevel;
+
 	// Reggie
 	int color;		// 6
 	u8 numWorld;	// 7
 	u8 numLevel;	// 8
-	u8 currentLevel;
+	bool isRotate;	// 9 b1
 	u8 dCoinID;		// 11
 
 	void updateModelMatrices();
@@ -74,7 +76,8 @@ Profile smwDCoinProfile(&daSMW_DragonCions_c::build, SpriteId::smwDCoin, &smwDCo
 void daSMW_DragonCions_c::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) { 
 	nw4r::snd::SoundHandle GetCoinshandle;
 
-	this->playerPos = GetSpecificPlayerActor(0)->pos;	// get 1P(id:0)'s pos
+	this->playerPos = GetSpecificPlayerActor(apOther->owner->which_player)->pos;
+	Vec goodpos = {this->playerPos.x, this->playerPos.y + 24, this->playerPos.z};
 	
 
 	collectedDCoinID[collectionDCoin] = this->dCoinID;				// 獲得したコインのIDを配列に保存	// [0] <- dCoinID + 1
@@ -94,20 +97,28 @@ void daSMW_DragonCions_c::playerCollision(ActivePhysics *apThis, ActivePhysics *
 
 	if(collectionDCoin < 5){			// I want to do 1000*2(n-1) ;;
 		PlaySoundWithFunctionB4(SoundRelatedClass, &GetCoinshandle, SE_OBJ_GET_DRAGON_COIN, 1);
-		if(collectionDCoin == 1){		// 1,2
-			AddScore(1000 * collectionDCoin, apOther->owner->which_player);	// howmany, playerID
+		if(collectionDCoin == 1){		// 1
+			AddScore(1000, apOther->owner->which_player);	// howmany, playerID
+			DisplayScoreAddPopup(goodpos, 0x4, apOther->owner->which_player, false);
+		}
+		else if(collectionDCoin == 2){	// 2
+			AddScore(2000, apOther->owner->which_player);
+			DisplayScoreAddPopup(goodpos, 0x5, apOther->owner->which_player, false);
 		}
 		else if(collectionDCoin == 3){	//3
 			AddScore(4000, apOther->owner->which_player);
+			DisplayScoreAddPopup(goodpos, 0x6, apOther->owner->which_player, false);
 		}
 		else if(collectionDCoin == 4){	//4
 			AddScore(8000, apOther->owner->which_player);
+			DisplayScoreAddPopup(goodpos, 0x7, apOther->owner->which_player, false);
 		}
 	}
 	else{
 		PlaySoundWithFunctionB4(SoundRelatedClass, &GetCoinshandle, SE_OBJ_GET_DRAGON_COIN_COMPLETE, 1);
 		// Apply lives to everyone
-		oneUPPopup(this->playerPos);	// Known Issue: The 1UP popup is appear only 1P position. // 既知の問題: 1Pの座標にしか1UPが表示されない。
+		Vec goodpos = {this->playerPos.x, this->playerPos.y + 16, this->playerPos.z};
+		oneUPPopup(goodpos);	// Known Issue: The 1UP popup is appear only 1P position. // 既知の問題: 1Pの座標にしか1UPが表示されない。
 		for (int i = 0; i < 4; i++) {
 			if (Player_Active[i]) {
 				addRest(i, 1, true);
@@ -164,6 +175,11 @@ int daSMW_DragonCions_c::onCreate() {
 	this->color = this->settings >> 24 & 0xF;				// 0000 0"0"00 0000 0000	// nybble 6
 	this->numWorld = (this->settings >> 20 & 0xF);			// 0000 00"0"0 0000 0000	// nybble 7
 	this->numLevel = (this->settings >> 16 & 0xF);			// 0000 000"0" 0000 0000	// nybble 8
+	int nybble9 = this->settings >> 12 & 0xF;				// 0000 000"0" 0000 0000	// nybble 9 (for bools)
+	this->isRotate = nybble9 & 0b1;		// 0000 000"+1" 0000 0000
+	//this->[empty] = nybble8 & 0b10;
+	//this->[empty] = nybble8 & 0b100;
+	//this->[empty] = nybble8 & 0b1000;
 	this->dCoinID = (this->settings >> 4 & 0xF) + 1;		// 0000 0000 00"0"0 0000	// nybble 11
 
 	// Related models
@@ -199,16 +215,32 @@ int daSMW_DragonCions_c::onCreate() {
 	this->aPhysics.initWithStruct(this, &HitMeBaby);
 	this->aPhysics.addToList();
 
-	this->scale.x = 0.8;
-	this->scale.y = 0.8;
-	this->scale.z = 1.0;
-
 	this->pos.x += 0.0;
 	this->pos.z = 3000.0;
 	
 	this->rot.x = 0;
 	this->rot.y = 0;
-	this->rot.z -= 0x14000;
+	if(this->color == 0){		// 2D texture
+		this->scale.x = 0.8;
+		this->scale.y = 0.8;
+		this->scale.z = 1.0;
+
+		this->rot.z -= 0x14000;
+	}
+	else if(this->color == 1){	// By Bukachell
+		this->scale.x = 0.22;
+		this->scale.y = 0.22;
+		this->scale.z = 0.16;
+
+		this->rot.z = 0;
+	}
+	if(this->color == 2){		// By Microtransagolor
+		this->scale.x = 0.8;
+		this->scale.y = 0.9;
+		this->scale.z = 0.7;
+
+		this->rot.z = 0;
+	}
 
 	this->onExecute();
 
@@ -227,7 +259,7 @@ int daSMW_DragonCions_c::onCreate() {
 
 	for (int i = 0; i < 16; i++) {	// コインIDが取得済みのIDリスト内にあるか
 		if(this->dCoinID == collectedDCoinID[i]){
-			if(this->currentLevel == currentLevelCashe){	// 
+			if(this->currentLevel == currentLevelCashe){	// キャッシュに保存したステージデータ(触れた時更新)が現在のステージデータと同じかどうか
 				this->Delete(1);	// さーて削除削除削除削除削除削除削除削除削除削除
 			}
 		}
@@ -258,7 +290,9 @@ void daSMW_DragonCions_c::updateModelMatrices() {
 
 int daSMW_DragonCions_c::onExecute() {
 	updateModelMatrices();
-	
-	// this->rot.y += 0x200;
+	if(this->isRotate){
+		this->rot.y += 0x200;
+	}
+
 	return true;
 }
