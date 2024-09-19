@@ -105,24 +105,7 @@ void dakoton_c::updateModelMatrices() {
 /////////////////////////////
 // Collision
 void dakoton_c::playerCollision(ActivePhysics *apThis, ActivePhysics *apOther) {	
-	char hitType;
-	hitType = usedForDeterminingStatePress_or_playerCollision(this, apThis, apOther, 2);	// I think 4th argument is bool
-	
-	if(hitType < 3){		// not spin jump
-		DamagePlayer(this, apThis, apOther);
-	}
-	else{
-		//_vf258(*apOther);
-		//YoshiFumiJumpSet(this, apOther);
-		//pakkunYoshiFumiJumpSet(this, apOther);	// I could not guess the param_2.
-		/*
-		bouncePlayer(this, 4.0f);
-		PlaySound(this, SE_EMY_YOSHI_STEP);*/
-			
-		S16Vec nullRot = {0,0,0};
-		Vec oneVec = {1.0f, 1.0f, 1.0f};
-		SpawnEffect("Wm_ob_switch", 0, &apOther->owner->pos, &nullRot, &oneVec);
-	}
+	DamagePlayer(this, apThis, apOther);
 }
 void dakoton_c::yoshiCollision(ActivePhysics *apThis, ActivePhysics *apOther) {
 	return playerCollision(apThis, apOther);
@@ -179,6 +162,10 @@ bool dakoton_c::collisionCat13_Hammer(ActivePhysics *apThis, ActivePhysics *apOt
 	S16Vec nullRot = {0,0,0};
 	Vec oneVec = {1.0f, 1.0f, 1.0f};
 	SpawnEffect("Wm_mr_hardhit", 0, &pos, &nullRot, &oneVec);
+
+	Vec thispos = {this->pos.x, this->pos.y + 24, this->pos.z};
+	DisplayScoreAddPopup(thispos, 0x1, apOther->owner->which_player, false);
+	AddScore(200, apOther->owner->which_player);	// howmany, playerID
 	
 	dEn_c::_vf148();
 	doStateChange(&StateID_diekoton);
@@ -234,13 +221,14 @@ int dakoton_c::onCreate() {
 	this->jumpingDistance = this->settings >> 8 & 0xF;	// 0000 0000 0"0"00 0000	// nybble 10
 	this->beginDelay = this->settings >> 4 & 0xF;		// 0000 0000 00"0"0 0000	// nybble 11
 	// 値の確認用	// Check values
-	OSReport("color : %02d\n", this->color);
-	OSReport("timewait : %02d\n", this->timewait);
-	OSReport("jumphight : %02d\n", this->jumphight);
-	OSReport("firstDirectionReggie : %02d\n", this->firstDirectionReggie);
-	OSReport("landSFX : %02d\n", this->landSFX);
-	OSReport("jumpingDistance : %02d\n", this->jumpingDistance);
-	OSReport("beginDelay : %02d\n", this->beginDelay);
+	if (enableDebugMode){
+		OSReport("color : %02d\n", this->color);
+		OSReport("timewait : %02d\n", this->timewait);
+		OSReport("jumphight : %02d\n", this->jumphight);
+		OSReport("firstDirectionReggie : %02d\n", this->firstDirectionReggie);
+		OSReport("landSFX : %02d\n", this->landSFX);
+		OSReport("jumpingDistance : %02d\n", this->jumpingDistance);
+	}
 
 	// 初期化ってやつ？
 	this->timer = 0;
@@ -321,8 +309,10 @@ void dakoton_c::beginState_jumpkoton(){
 }
 void dakoton_c::executeState_jumpkoton(){
 	//if (this->timer < 30){	// jumping
+	if (this->jumphight != 0){
 		this->pos.y += (2.0f * this->jumphight - ((this->timer * this->timer - this->timer) / (495 / this->jumphight)));	// about 3*n blocks
 		this->pos.x += 1.1f * this->firstDirection * this->jumpingDistance;	// about 4*n blocks
+	}
 	/*}
 	else if (this->timer >= 30){	// falling
 		this->pos.y += (-1.9f * this->jumphight - ((this->timer * this->timer - this->timer) / (450 / this->jumphight)));
