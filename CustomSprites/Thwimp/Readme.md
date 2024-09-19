@@ -1,4 +1,4 @@
-# Thwimp v1.2.0 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/Thwimp/Reggie/sprites/Koton_0.png" width="32" align="center" />
+# Thwimp v1.2.1 <img src="https://github.com/wakanameko/NSMBW-Custom-Sprites/blob/main/CustomSprites/Thwimp/Reggie/sprites/Koton_0.png" width="32" align="center" />
 *by ReaZ0n23*
 
 
@@ -29,12 +29,15 @@
 
 
 ## Change Log
- - v1.0.0
+ - v1.0.0  
    First release
- - v1.1.0
+ - v1.1.0  
    Added the Jumping Distance option. So you can change the jump distance with Reggie!.
- - v1.2.0
-   Supported the Newer1.30 (CW compiler).  
-
-
+ - v1.2.0  
+   Supported the Newer1.30 (CW compiler).
+ - v1.2.1  
+   Fixed an issue where koton would slide sideways when the jump height was 0.  
+   Changed codes that check Reggie settings to be enabled only in debug mode.  
+  
+  
 *If I forgot some stuff or if you find a bug, be free to let me know*
