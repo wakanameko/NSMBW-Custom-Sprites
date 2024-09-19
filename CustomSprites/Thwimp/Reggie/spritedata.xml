@@ -15,7 +15,7 @@
       <entry value="9">9 / Very very slow</entry>
     </list>
     <list nybble="7" title="Jump height" comment="You can change the jump height.">
-      <entry value="0">0 / Won't jump (Don't use this)</entry>
+      <entry value="0">0 / Won't jump</entry>
       <entry value="1">1 / 3 blocks</entry>
       <entry value="2">2 / 6 blocks (recommend)</entry>
       <entry value="3">3 / 9</entry>
