@@ -1,0 +1,21 @@
+  <sprite id="299" name="45° Cannon" notes="A cannon that will fire ammo in a 45° direction, and can fire either cannonballs or Bob-Ombs.">
+    <list nybble="9" title="Ammo Type" comment="This determines what the cannon will fire. One cannon will only let out 8 Bob-ombs at a time.">
+      <entry value="0">Cannon Ball</entry>
+      <entry value="1">Bob-Omb; Low arc</entry>
+      <entry value="2">Bob-Omb; High arc</entry>
+      <entry value="3">Anything Type1</entry>
+      <entry value="4">Anything Type2</entry>
+    </list>
+    <list nybble="7" title="Camera Influence (For Cannon ball and Type1)" comment="This determines how the cannonball moves relative to the camera.">
+      <entry value="0">Unaffected by Camera</entry>
+      <entry value="1">Affected by All Camera Movements</entry>
+      <entry value="2">Affected by Vertical Camera Movements</entry>
+      <entry value="3">Affected by Horizontal Camera Movements</entry>
+    </list>
+    <value nybble="8" title="Fire Delay (For Bob-Ombs and Type2)" comment="This determines how long the cannon will wait between each time it launches a Bob-Omb. This value is measured in game seconds."/>
+    <checkbox nybble="11.4" title="Upside-Down" comment2="The cannon is able to shoot left, right, up and down by editing both nybble 11 and 12. However, the sprite was not intended to these settings. As a result, all unlisted settings do not work properly."/>
+    <checkbox nybble="10.4" title="Rotating Cannon" comment="When enabled, the cannon will rotate in the opposite direction after each time it fires."/>
+    <dualbox nybble="12.4" title1="Faces Right" title2="Faces Left" requirednybble="10.4" requiredval="0"/>
+    <dualbox nybble="12.4" title1="Faces Right First" title2="Faces Left First" requirednybble="10.4"/>
+    <external title="Actor ID" type="actors" nybble="5.2-7.4" comment="Use this external window to select your Actor."/>
+  </sprite> <!-- #299: 45° Cannon -->
