@@ -22,13 +22,13 @@
 ## Reggie
 - Add the content of `spritedata.xml` into your `spritedata.xml` like every other sprites (replace XXX by the sprite ID)  
 - Restart reggie to apply the changes  
-
-
+  
+  
 ## Change Log
 - v1.0.0
 > First release!  
-> Known issues:
-> 
-
-
+> Known issues:  
+> Type1 is not supported the rotation.  
+  
+  
 *If I forgot some stuff or if you find a bug, be free to let me know*
