@@ -29,6 +29,7 @@
 > First release!  
 > Known issues:  
 > Type1 is not supported the rotation.  
+> Limitless Bob-Omb option is broken. I'll fix this in next version.  
   
   
 *If I forgot some stuff or if you find a bug, be free to let me know*
