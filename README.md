@@ -1,6 +1,6 @@
 # NSMBW-Custom-Sprites
 ----------------------------------------------------------------------
-This repository are contain in the [this repository](https://github.com/Developers-Collective/NSMBW-Custom-Sprites/tree/main)
+This repository are contained in the [this repository](https://github.com/Developers-Collective/NSMBW-Custom-Sprites/tree/main)
 
 This repository contains the source code for the custom sprites I made for New Super Mario Bros. Wii.
 
